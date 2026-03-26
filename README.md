@@ -50,7 +50,6 @@
 <hr>
 
 <h2>▶️ Preview Project</h2>
-<video src="0326_out.mp4" width="600" controls></video>
 
 <hr>
 
