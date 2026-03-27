@@ -50,7 +50,7 @@
 <hr>
 
 <h2>▶️ Preview Project</h2>
-
+<video width="800" height="450" src="https://github.com/user-attachments/assets/7ec3485a-be51-487b-a729-1552b2dd2332"></video>
 <hr>
 
 <h2>🔜 Progress </h2>
