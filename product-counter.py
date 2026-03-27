@@ -24,7 +24,6 @@ cv2.setMouseCallback("CAM Conveyor", deteksi_klik_mouse)
 
 # Pengaturan Penghitung
 batas_garis_start = (210, 353)
-batas_garis_start = (210, 353)
 batas_garis_end = (698, 316)      # Posisi garis horizontal di bawah (koordinat Y)
 offset = 15              # Toleransi area di sekitar garis
 jumlah_produk = 0
@@ -43,8 +42,8 @@ kernel = np.ones((3, 3), np.uint8)
 # color thresholds (HSV)
 lower_orange = np.array([5, 100, 100])
 upper_orange = np.array([20, 255, 255])
-lower_white = np.array([0, 0, 200])
-upper_white = np.array([180, 60, 255])
+lower_white = np.array([0, 0, 255])
+upper_white = np.array([200, 60, 255])
 
 # Read first frame before loop so we can allocate fixed-size data once
 ret, frame = cap.read()
@@ -93,7 +92,7 @@ while ret and not exit_program:
         # rebuild detections for this processing step
         detections = []
         for contour in contours:
-            if cv2.contourArea(contour) < 400:  # area threshold for small frame
+            if cv2.contourArea(contour) < 100:  # area threshold for small frame
                 continue
             x_s, y_s, w_s, h_s = cv2.boundingRect(contour)
 
@@ -145,9 +144,25 @@ while ret and not exit_program:
     cv2.rectangle(frame, (700, 10), (790, 50), (0, 0, 255), -1)
     cv2.putText(frame, "EXIT", (715, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
     
-    # Teks Jumlah
-    cv2.putText(frame, f"Total Produk: {jumlah_produk}", (30, 50), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    # Overlay settings
+    overlay = frame.copy()
+    # Rectangle parameters
+    x, y, w, h = 10, 10, 262, 250
+    cv2.rectangle(overlay, (x, y), (x+w, y+h), (0, 0, 0), -1)
+    alpha = 0.4
+    frame = cv2.addWeighted(overlay, alpha, frame, 1 - alpha, 0)
+    
+    # Text on overlay
+    cv2.putText(frame, f"Product Details :", (25, 38), cv2.FONT_HERSHEY_PLAIN, 1.5, (255, 255, 255), 2)
+    cv2.putText(frame, f"Index : #0362", (25, 70), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
+    cv2.putText(frame, f"Name : Cosmetic", (25, 90), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
+    cv2.putText(frame, f"Type  : H3", (25, 110), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
+    cv2.putText(frame, f"Source : Main Production", (25, 130), cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
+    cv2.putText(frame, f"Count Prod. : {jumlah_produk}", (25, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+    
+    # # Teks Jumlah
+    # cv2.putText(frame, f"Total Produk: {jumlah_produk}", (22, 389), 
+    #             cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     
     cv2.imshow("CAM Conveyor", frame)
     out.write(frame)
